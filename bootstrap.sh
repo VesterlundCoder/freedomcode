@@ -185,12 +185,21 @@ step "Step 6: Install Aider"
 if command -v aider &>/dev/null; then
   success "Aider already installed: $(aider --version 2>&1 | head -1)"
 else
-  info "Installing Aider via pip..."
-  # Ensure build tools are present (required on Python 3.12+ / 3.14)
-  pip3 install --upgrade setuptools wheel pip
-  # Force version >=0.80 + no-cache to avoid pip resolving ancient 0.16.0
-  # (0.16.0 pins numpy==1.24.3 which has no Python 3.12/3.14 wheel)
-  pip3 install --upgrade --no-cache-dir "aider-chat>=0.80"
+  info "Installing Aider..."
+  # aider-chat requires Python <3.14. Use uv tool install which auto-selects
+  # a compatible Python version (3.12), bypassing any system Python 3.14 issue.
+  if command -v uv &>/dev/null; then
+    uv tool install aider-chat
+    export PATH="${HOME}/.local/bin:${PATH}"
+  elif command -v pipx &>/dev/null; then
+    # pipx fallback: force Python 3.12
+    pipx install aider-chat --python "$(command -v python3.12 || echo python3)"
+  else
+    # Last resort: install pipx first, then aider
+    pip3 install pipx
+    python3 -m pipx install aider-chat --python "$(command -v python3.12 || echo python3)"
+    export PATH="${HOME}/.local/bin:${PATH}"
+  fi
   success "Aider installed"
 fi
 
