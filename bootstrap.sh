@@ -264,8 +264,9 @@ if [[ -f "${CONTINUE_DIR}/config.yaml" ]]; then
   cp "${CONTINUE_DIR}/config.yaml" "${CONTINUE_DIR}/config.yaml.bak.$(date +%Y%m%d_%H%M%S)"
 fi
 
-info "Installing Continue.dev config..."
-cp "${SCRIPT_DIR}/continue/config.yaml" "${CONTINUE_DIR}/config.yaml"
+info "Installing Continue.dev config (model: ${OLLAMA_MODEL})..."
+sed "s/qwen2.5-coder:32b/${OLLAMA_MODEL}/g" \
+  "${SCRIPT_DIR}/continue/config.yaml" > "${CONTINUE_DIR}/config.yaml"
 success "Continue.dev configured at ${CONTINUE_DIR}/config.yaml"
 
 # ─── Step 11: Set executable permissions ─────────────────────────────────────

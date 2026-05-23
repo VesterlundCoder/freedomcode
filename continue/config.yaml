@@ -9,9 +9,9 @@ version: 1.0.0
 
 # ─── Models ──────────────────────────────────────────────────────────────────
 models:
-  - name: Qwen2.5-Coder 14B
+  - name: Qwen2.5-Coder 32B
     provider: ollama
-    model: qwen2.5-coder:14b
+    model: qwen2.5-coder:32b
     apiBase: http://localhost:11434
     contextLength: 32768
     roles:
@@ -30,9 +30,9 @@ models:
 # ─── Tab Autocomplete ─────────────────────────────────────────────────────────
 tabAutocomplete:
   model:
-    name: Qwen2.5-Coder 14B
+    name: Qwen2.5-Coder 32B
     provider: ollama
-    model: qwen2.5-coder:14b
+    model: qwen2.5-coder:32b
     apiBase: http://localhost:11434
   enabled: true
   multilineCompletions: "auto"
