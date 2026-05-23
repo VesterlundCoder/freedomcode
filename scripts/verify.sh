@@ -11,7 +11,7 @@ QUIET="${1:-}"
 # Source .env for OLLAMA_MODEL override; extend PATH for npm-global + uv
 [[ -f "${SCRIPT_DIR}/.env" ]] && source "${SCRIPT_DIR}/.env"
 OLLAMA_MODEL="${OLLAMA_MODEL:-qwen2.5-coder:32b}"
-export PATH="${HOME}/.npm-global/bin:${HOME}/.local/bin:${PATH}"
+export PATH="${HOME}/.npm-global/bin:${HOME}/.local/bin:$(python3 -m site --user-base 2>/dev/null)/bin:${PATH}"
 
 GREEN='\033[0;32m'; RED='\033[0;31m'; YELLOW='\033[1;33m'
 CYAN='\033[0;36m'; BOLD='\033[1m'; RESET='\033[0m'
