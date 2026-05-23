@@ -147,6 +147,14 @@ fi
 # ─── Step 5: MCP servers (npm) ────────────────────────────────────────────────
 step "Step 5: Install MCP servers"
 
+# Fix npm global prefix to avoid permission errors on macOS
+if [[ ! -d "${HOME}/.npm-global" ]]; then
+  mkdir -p "${HOME}/.npm-global"
+  npm config set prefix "${HOME}/.npm-global"
+  info "npm global prefix set to ~/.npm-global"
+fi
+export PATH="${HOME}/.npm-global/bin:${PATH}"
+
 install_npm_global() {
   local pkg="$1"
   if npm list -g "$pkg" &>/dev/null 2>&1; then
@@ -159,12 +167,17 @@ install_npm_global() {
 }
 
 install_npm_global "@modelcontextprotocol/server-filesystem"
-install_npm_global "@modelcontextprotocol/server-git"
+
+# Git MCP server (Python-based, more reliable)
+if ! command -v mcp-server-git &>/dev/null; then
+  info "Installing mcp-server-git via pip..."
+  pip3 install mcp-server-git 2>/dev/null || \
+    warn "mcp-server-git not available via pip. Git context will use Continue.dev built-in."
+fi
 
 # Shell MCP server (community package)
 info "Installing MCP shell server..."
 npm install -g "@modelcontextprotocol/server-shell" 2>/dev/null || \
-  npm install -g "mcp-server-shell" 2>/dev/null || \
   warn "Shell MCP server not available as npm package. Using local wrapper instead."
 
 # ─── Step 6: Aider ────────────────────────────────────────────────────────────

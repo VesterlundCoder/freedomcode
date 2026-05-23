@@ -8,6 +8,11 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 QUIET="${1:-}"
 
+# Source .env for OLLAMA_MODEL override; extend PATH for npm-global + uv
+[[ -f "${SCRIPT_DIR}/.env" ]] && source "${SCRIPT_DIR}/.env"
+OLLAMA_MODEL="${OLLAMA_MODEL:-qwen2.5-coder:32b}"
+export PATH="${HOME}/.npm-global/bin:${HOME}/.local/bin:${PATH}"
+
 GREEN='\033[0;32m'; RED='\033[0;31m'; YELLOW='\033[1;33m'
 CYAN='\033[0;36m'; BOLD='\033[1m'; RESET='\033[0m'
 
@@ -23,9 +28,11 @@ section()    { echo -e "\n${BOLD}${CYAN}── $* ──${RESET}"; }
 # ─── Core tools ───────────────────────────────────────────────────────────────
 section "Core Tools"
 
-command -v brew &>/dev/null && \
-  check_pass "Homebrew: $(brew --version | head -1)" || \
+if command -v brew &>/dev/null; then
+  check_pass "Homebrew: $(brew --version | head -1)"
+else
   check_fail "Homebrew: NOT FOUND"
+fi
 
 command -v git &>/dev/null && \
   check_pass "git: $(git --version)" || \
@@ -66,10 +73,10 @@ else
   check_warn "Ollama API: not reachable (is service running?)"
 fi
 
-if ollama list 2>/dev/null | grep -q "qwen2.5-coder:32b"; then
-  check_pass "Model qwen2.5-coder:32b: installed"
+if ollama list 2>/dev/null | grep -q "${OLLAMA_MODEL}"; then
+  check_pass "Model ${OLLAMA_MODEL}: installed"
 else
-  check_fail "Model qwen2.5-coder:32b: NOT installed — run: ollama pull qwen2.5-coder:32b"
+  check_fail "Model ${OLLAMA_MODEL}: NOT installed — run: ollama pull ${OLLAMA_MODEL}"
 fi
 
 # ─── MCP servers ──────────────────────────────────────────────────────────────
@@ -81,7 +88,7 @@ npm list -g @modelcontextprotocol/server-filesystem &>/dev/null && \
 
 npm list -g @modelcontextprotocol/server-git &>/dev/null && \
   check_pass "@modelcontextprotocol/server-git: installed" || \
-  check_fail "@modelcontextprotocol/server-git: NOT installed"
+  check_warn "@modelcontextprotocol/server-git: not on npm (git context via Continue.dev built-in)"
 
 # ─── Aider ────────────────────────────────────────────────────────────────────
 section "Aider"
