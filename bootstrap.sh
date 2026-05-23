@@ -34,7 +34,12 @@ banner()  {
 # ─── Environment ─────────────────────────────────────────────────────────────
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LOG_FILE="${SCRIPT_DIR}/logs/bootstrap_$(date +%Y%m%d_%H%M%S).log"
-OLLAMA_MODEL="qwen2.5-coder:32b"
+
+# Source .env if present (allows OLLAMA_MODEL override)
+[[ -f "${SCRIPT_DIR}/.env" ]] && source "${SCRIPT_DIR}/.env"
+
+# Default to 32b unless overridden via .env or environment
+OLLAMA_MODEL="${OLLAMA_MODEL:-qwen2.5-coder:32b}"
 
 # Ensure logs directory exists
 mkdir -p "${SCRIPT_DIR}/logs"
@@ -130,7 +135,7 @@ fi
 
 # ─── Step 4: Pull Qwen2.5-Coder 32B ──────────────────────────────────────────
 step "Step 4: Pull ${OLLAMA_MODEL}"
-if ollama list 2>/dev/null | grep -q "qwen2.5-coder:32b"; then
+if ollama list 2>/dev/null | grep -q "${OLLAMA_MODEL}"; then
   success "${OLLAMA_MODEL} already downloaded"
 else
   info "Pulling ${OLLAMA_MODEL} (~20 GB). This will take a while..."
