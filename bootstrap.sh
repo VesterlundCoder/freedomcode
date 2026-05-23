@@ -186,7 +186,10 @@ if command -v aider &>/dev/null; then
   success "Aider already installed: $(aider --version 2>&1 | head -1)"
 else
   info "Installing Aider via pip..."
-  pip3 install aider-chat
+  # Ensure build tools are present (required on Python 3.12+ / 3.14)
+  pip3 install --upgrade setuptools wheel pip
+  # Use --upgrade to pull the latest aider-chat (avoids old pinned numpy/aiohttp issues)
+  pip3 install --upgrade aider-chat
   success "Aider installed"
 fi
 
