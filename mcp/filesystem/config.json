@@ -1,0 +1,24 @@
+{
+  "name": "freedomcode-filesystem",
+  "description": "MCP filesystem server — scoped to ./workspace only",
+  "command": "npx",
+  "args": [
+    "-y",
+    "@modelcontextprotocol/server-filesystem",
+    "./workspace"
+  ],
+  "env": {},
+  "security": {
+    "allowed_paths": ["./workspace"],
+    "deny_patterns": [
+      "~/.ssh",
+      "~/.config",
+      "~/.gnupg",
+      "/etc",
+      "/var",
+      "/usr",
+      "/System"
+    ]
+  },
+  "notes": "Filesystem access is intentionally restricted to ./workspace. Never expand scope to user home or system directories."
+}

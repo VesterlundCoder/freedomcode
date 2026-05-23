@@ -1,0 +1,75 @@
+# =============================================================================
+# freedomcode — .gitignore
+# =============================================================================
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+*.cover
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Logs
+logs/*.log
+logs/*.pid
+*.log
+
+# Workspace content (user files — not tracked by default)
+workspace/projects/
+workspace/notebooks/
+workspace/scratch/
+
+# Sandbox
+sandbox/tmp/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# VS Code
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+*.code-workspace.bak
+
+# Docker
+docker-compose.override.yml
+
+# Model files
+*.gguf
+*.bin
+*.safetensors
+
+# Editor
+*.swp
+*.swo
+*~
+.idea/

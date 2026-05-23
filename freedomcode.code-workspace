@@ -1,0 +1,124 @@
+{
+  "folders": [
+    {
+      "name": "freedomcode",
+      "path": "."
+    },
+    {
+      "name": "workspace",
+      "path": "./workspace"
+    }
+  ],
+  "settings": {
+    "editor.fontSize": 14,
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true,
+    "editor.rulers": [88, 120],
+    "editor.bracketPairColorization.enabled": true,
+    "editor.inlineSuggest.enabled": true,
+
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+    "python.formatting.provider": "none",
+
+    "[python]": {
+      "editor.defaultFormatter": "charliermarsh.ruff",
+      "editor.formatOnSave": true,
+      "editor.codeActionsOnSave": {
+        "source.fixAll.ruff": "explicit",
+        "source.organizeImports.ruff": "explicit"
+      }
+    },
+
+    "continue.telemetryEnabled": false,
+    "continue.enableTabAutocomplete": true,
+
+    "files.exclude": {
+      "**/__pycache__": true,
+      "**/*.pyc": true,
+      ".venv": true,
+      "node_modules": true,
+      ".git": false
+    },
+
+    "terminal.integrated.defaultProfile.osx": "zsh",
+    "terminal.integrated.fontSize": 13,
+
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "gitlens.hovers.currentLine.over": "line",
+
+    "docker.showStartPage": false
+  },
+  "extensions": {
+    "recommendations": [
+      "Continue.continue",
+      "ms-python.python",
+      "ms-python.vscode-pylance",
+      "charliermarsh.ruff",
+      "ms-toolsai.jupyter",
+      "ms-azuretools.vscode-docker",
+      "eamodio.gitlens",
+      "usernamehw.errorlens",
+      "streetsidesoftware.code-spell-checker",
+      "yzhang.markdown-all-in-one",
+      "redhat.vscode-yaml",
+      "ms-vscode.makefile-tools"
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Python: Current File",
+        "type": "python",
+        "request": "launch",
+        "program": "${file}",
+        "console": "integratedTerminal",
+        "justMyCode": true,
+        "python": "${workspaceFolder}/.venv/bin/python"
+      },
+      {
+        "name": "Python: Pytest",
+        "type": "python",
+        "request": "launch",
+        "module": "pytest",
+        "args": ["-v"],
+        "console": "integratedTerminal",
+        "python": "${workspaceFolder}/.venv/bin/python"
+      }
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Start Ollama",
+        "type": "shell",
+        "command": "./scripts/start.sh",
+        "group": "build",
+        "presentation": { "reveal": "always", "panel": "new" }
+      },
+      {
+        "label": "Start Aider",
+        "type": "shell",
+        "command": "./scripts/start-aider.sh",
+        "group": "build",
+        "presentation": { "reveal": "always", "panel": "new" }
+      },
+      {
+        "label": "Verify Stack",
+        "type": "shell",
+        "command": "./scripts/verify.sh",
+        "group": "test",
+        "presentation": { "reveal": "always", "panel": "shared" }
+      },
+      {
+        "label": "Update All",
+        "type": "shell",
+        "command": "./scripts/update.sh",
+        "group": "build",
+        "presentation": { "reveal": "always", "panel": "shared" }
+      }
+    ]
+  }
+}

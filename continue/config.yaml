@@ -1,0 +1,133 @@
+# =============================================================================
+# freedomcode — Continue.dev configuration
+# ~/.continue/config.yaml  (bootstrap.sh copies this automatically)
+# Docs: https://docs.continue.dev/reference/config
+# =============================================================================
+
+name: FreedomCode Local AI
+version: 1.0.0
+
+# ─── Models ──────────────────────────────────────────────────────────────────
+models:
+  - name: Qwen2.5-Coder 32B
+    provider: ollama
+    model: qwen2.5-coder:32b
+    apiBase: http://localhost:11434
+    contextLength: 32768
+    roles:
+      - chat
+      - edit
+      - apply
+
+  - name: Qwen2.5-Coder 7B (fast)
+    provider: ollama
+    model: qwen2.5-coder:7b
+    apiBase: http://localhost:11434
+    contextLength: 32768
+    roles:
+      - autocomplete
+
+# ─── Tab Autocomplete ─────────────────────────────────────────────────────────
+tabAutocomplete:
+  model:
+    name: Qwen2.5-Coder 32B
+    provider: ollama
+    model: qwen2.5-coder:32b
+    apiBase: http://localhost:11434
+  enabled: true
+  multilineCompletions: "auto"
+  debounceDelay: 300
+  maxPromptTokens: 4096
+
+# ─── Context Providers ────────────────────────────────────────────────────────
+context:
+  - provider: code
+    params:
+      nRetrieve: 25
+      useReranking: false
+
+  - provider: docs
+    params: {}
+
+  - provider: diff
+    params: {}
+
+  - provider: terminal
+    params: {}
+
+  - provider: problems
+    params: {}
+
+  - provider: folder
+    params: {}
+
+  - provider: codebase
+    params:
+      nRetrieve: 25
+      nFinal: 5
+      useReranking: false
+
+  - provider: tree
+    params: {}
+
+# ─── MCP Servers ─────────────────────────────────────────────────────────────
+mcpServers:
+  - name: filesystem
+    command: npx
+    args:
+      - "-y"
+      - "@modelcontextprotocol/server-filesystem"
+      - "./workspace"
+    env: {}
+
+  - name: git
+    command: npx
+    args:
+      - "-y"
+      - "@modelcontextprotocol/server-git"
+      - "--repository"
+      - "."
+    env: {}
+
+  - name: shell
+    command: npx
+    args:
+      - "-y"
+      - "@modelcontextprotocol/server-shell"
+    env:
+      SHELL_ALLOWLIST: "ls,cat,grep,find,git,python3,uv,pip,echo,pwd,env,which,tree,wc"
+
+# ─── Slash Commands ───────────────────────────────────────────────────────────
+slashCommands:
+  - name: share
+    description: "Export current conversation"
+
+  - name: commit
+    description: "Generate a git commit message for staged changes"
+
+  - name: review
+    description: "Review the current file for bugs and improvements"
+
+  - name: test
+    description: "Generate unit tests for the selected code"
+
+  - name: explain
+    description: "Explain the selected code in plain language"
+
+  - name: refactor
+    description: "Suggest refactoring improvements"
+
+# ─── UI & Behavior ────────────────────────────────────────────────────────────
+ui:
+  codeBlockToolbarPosition: "top"
+  fontSize: 14
+  displayRawMarkdown: false
+
+# ─── Privacy ─────────────────────────────────────────────────────────────────
+analytics:
+  provider: null
+
+telemetry:
+  enabled: false
+
+allowAnonymousTelemetry: false

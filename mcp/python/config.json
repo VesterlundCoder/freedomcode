@@ -1,0 +1,16 @@
+{
+  "name": "freedomcode-python",
+  "description": "Python execution via Docker sandbox",
+  "command": "docker",
+  "args": [
+    "compose",
+    "-f",
+    "./docker-compose.yml",
+    "run",
+    "--rm",
+    "sandbox",
+    "python3"
+  ],
+  "env": {},
+  "notes": "Python execution is sandboxed via Docker. No network access. Limited to 4g RAM and 4 CPUs."
+}

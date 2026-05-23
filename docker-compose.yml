@@ -1,0 +1,72 @@
+version: "3.9"
+
+# =============================================================================
+# freedomcode — docker-compose.yml
+# Isolated sandbox for safe AI-generated code execution
+# =============================================================================
+
+services:
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # sandbox — Python execution environment
+  # Mounts ./workspace read-write; everything else is isolated
+  # ──────────────────────────────────────────────────────────────────────────
+  sandbox:
+    build:
+      context: ./sandbox
+      dockerfile: Dockerfile
+    container_name: freedomcode-sandbox
+    restart: "no"
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./workspace:/workspace:rw
+      - ./sandbox/scripts:/scripts:ro
+    working_dir: /workspace
+    mem_limit: 4g
+    cpus: "4"
+    network_mode: none
+    security_opt:
+      - no-new-privileges:true
+    read_only: false
+    tmpfs:
+      - /tmp:size=512m,mode=1777
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # jupyter — JupyterLab server accessible at http://localhost:8888
+  # ──────────────────────────────────────────────────────────────────────────
+  jupyter:
+    build:
+      context: ./sandbox
+      dockerfile: Dockerfile
+    container_name: freedomcode-jupyter
+    restart: unless-stopped
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+      - JUPYTER_TOKEN=freedomcode
+    volumes:
+      - ./workspace:/workspace:rw
+    working_dir: /workspace
+    ports:
+      - "8888:8888"
+    mem_limit: 8g
+    cpus: "4"
+    network_mode: bridge
+    command: >
+      jupyter lab
+        --ip=0.0.0.0
+        --port=8888
+        --no-browser
+        --notebook-dir=/workspace
+        --NotebookApp.token=freedomcode
+        --NotebookApp.allow_root=True
+    profiles:
+      - jupyter
+
+networks:
+  default:
+    driver: bridge

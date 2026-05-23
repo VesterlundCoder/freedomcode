@@ -1,0 +1,22 @@
+{
+  "name": "freedomcode-git",
+  "description": "MCP git server — operations on current repository",
+  "command": "npx",
+  "args": [
+    "-y",
+    "@modelcontextprotocol/server-git",
+    "--repository",
+    "."
+  ],
+  "env": {},
+  "capabilities": [
+    "git_status",
+    "git_diff",
+    "git_log",
+    "git_show",
+    "git_blame",
+    "git_branch",
+    "git_commit"
+  ],
+  "notes": "Git MCP is scoped to the current repository only."
+}

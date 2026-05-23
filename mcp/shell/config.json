@@ -1,0 +1,29 @@
+{
+  "name": "freedomcode-shell",
+  "description": "MCP shell server — restricted command execution",
+  "command": "npx",
+  "args": [
+    "-y",
+    "@modelcontextprotocol/server-shell"
+  ],
+  "env": {
+    "SHELL_ALLOWLIST": "ls,cat,grep,find,git,python3,uv,pip,echo,pwd,env,which,tree,wc,head,tail,sort,uniq,awk,sed,cut,tr,date,id"
+  },
+  "security": {
+    "deny_commands": [
+      "rm -rf",
+      "sudo",
+      "chmod 777",
+      "curl | sh",
+      "wget | sh",
+      "dd if=",
+      "mkfs",
+      "fdisk",
+      "shutdown",
+      "reboot",
+      "kill -9 1"
+    ],
+    "working_directory": "./workspace"
+  },
+  "notes": "Shell commands are restricted via allowlist. Never add sudo, rm -rf /, or system-destructive commands."
+}
