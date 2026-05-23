@@ -188,8 +188,9 @@ else
   info "Installing Aider via pip..."
   # Ensure build tools are present (required on Python 3.12+ / 3.14)
   pip3 install --upgrade setuptools wheel pip
-  # Use --upgrade to pull the latest aider-chat (avoids old pinned numpy/aiohttp issues)
-  pip3 install --upgrade aider-chat
+  # Force version >=0.80 + no-cache to avoid pip resolving ancient 0.16.0
+  # (0.16.0 pins numpy==1.24.3 which has no Python 3.12/3.14 wheel)
+  pip3 install --upgrade --no-cache-dir "aider-chat>=0.80"
   success "Aider installed"
 fi
 
